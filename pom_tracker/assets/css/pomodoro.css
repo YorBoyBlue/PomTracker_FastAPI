@@ -1,0 +1,26 @@
+input.distractions_check {
+    margin: 5px;
+}
+
+input.top {
+    margin-left: 35px;
+}
+
+input.middle {
+    margin-left: 48px;
+}
+
+input.bottom {
+    margin-left: 35px;
+}
+
+h5.title {
+    margin-top: 20px;
+}
+
+#time-block-dropdown {
+    padding: 10px;
+    max-height: 300px;
+    overflow: auto;
+    width: 200px;
+}
