@@ -1,0 +1,2 @@
+class NoSessionRecordExists(Exception):
+    pass

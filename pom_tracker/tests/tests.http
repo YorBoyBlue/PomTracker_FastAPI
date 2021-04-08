@@ -1,0 +1,29 @@
+POST http://localhost:1988/users/create
+Content-Type: application/json
+
+{
+  "email": "Arin.a.h.blue@gmail.com",
+  "password": "123456789",
+  "first_name": "Arin",
+  "middle_name": "A.H.",
+  "last_name": "Blue",
+  "display_name": "Blue"
+}
+
+###
+POST http://localhost:1988/users/login
+Content-Type: application/json
+
+{
+  "email": "Arin.a.h.blue@gmail.com",
+  "password": "123456789"
+}
+
+###
+POST http://localhost:1988/users/login
+Accept:  application/x-www-form-urlencoded
+Content-Type: application/x-www-form-urlencoded
+
+{
+  "email=Arin.a.h.blue@gmail.com&password=123456789"
+}

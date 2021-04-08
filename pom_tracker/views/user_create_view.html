@@ -35,55 +35,53 @@
         <div class="row pom-form">
             <div class="col-md-12">
                 <div class="row">
+                    {% if email_exists %}
+                    <div class="alert alert-warning">
+                        <strong>Oops!</strong> There is already an account with that email address.
+                        Please double
+                        check your email address or use a different one if you have already created
+                        an account and
+                        would like to create another.
+                    </div>
+                    {% endif %}
                     <div class="col-12">
-                        {% if login_failed %}
-                        <div class="alert alert-warning">
-                            <strong>Oops!</strong> We could not find a user with that email and/or
-                            password. Please
-                            double check
-                            your info or create a new account.
-                        </div>
-                        {% endif %}
-                        {% if session_expired %}
-                        <div class="alert alert-warning">
-                            <strong>Oops!</strong> Your session has expired. Please login to verify
-                            it is still you.
-                        </div>
-                        {% endif %}
                         <p>Welcome to the Pomodoro Time Tracker! Time is the only non-renewable
                             resource. Here you can
                             make sure you are spending it wisely!</p>
-                        <br>
-                        <p>If you do not already have an account, you can create a new one by
-                            clicking the button below
-                            and
-                            filling out the form that follows. Start tracking where you spend your
-                            valuable time
-                            today!</p>
-
-                        <br>
-                        <a class="btn btn-success main-button" href="/users/create" role="button">Create
-                            New Account</a>
-                        <br><br><br>
-
-                        <p>If you do already have an account, login below.</p>
+                        <p>Create your account below and start tracking where you spend your
+                            valuable time today!</p>
                     </div>
                 </div>
-                <form action='/users/login' method='post' autocomplete="on">
+                <form action='/users/create' method='post'>
                     <div class="row">
                         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
-                            <h2>Login:</h2>
+                            <h2>Create User:</h2>
                             <br>
                             <label class="email" for="email"><b>Email:</b></label>
                             <input type="text" placeholder="Enter Email" name="email" required>
                             <br><br>
+                            <label class="first_name" for="first_name"><b>First Name:</b></label>
+                            <input type="text" placeholder="Enter First Name" name="first_name"
+                                   required>
+                            <br><br>
+                            <label class="middle_name" for="middle_name"><b>Middle
+                                Name:</b></label>
+                            <input type="text" placeholder="Enter Middle Name" name="middle_name">
+                            <br><br>
+                            <label class="last_name" for="last_name"><b>Last Name:</b></label>
+                            <input type="text" placeholder="Enter Last Name" name="last_name"
+                                   required>
+                            <br><br>
+                            <label class="display_name" for="display_name"><b>Display
+                                Name:</b></label>
+                            <input type="text" placeholder="Enter Display Name"
+                                   name="display_name">
+                            <br><br>
                             <label class="password" for="password"><b>Password:</b></label>
                             <input type="password" placeholder="Enter Password" name="password"
-                                   autocomplete="off"
                                    required>
                             <br><br><br>
-                            <button class="btn btn-primary main-button" role="button"
-                                    type="submit">Login
+                            <button class="btn btn-primary main-button" type="submit">Create User
                             </button>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">

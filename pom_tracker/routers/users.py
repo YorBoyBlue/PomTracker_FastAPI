@@ -1,17 +1,23 @@
-from fastapi import APIRouter, Request
+from fastapi import APIRouter
 from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates
+
+from ..controllers.users import *
+from ..models.user_schema import *
 
 router = APIRouter(
     prefix="/users",
     tags=["users"]
 )
 
-templates = Jinja2Templates(directory="views")
+router.get("/create", response_class=HTMLResponse)(get_user_create)
+router.post("/create", response_model=User)(user_create)
+
+router.get("/login", response_class=HTMLResponse)(get_user_login)
 
 
-@router.get("/login", response_class=HTMLResponse)
-def user_login(request: Request):
-    """User login endpoint"""
+router.post("/login")(user_login)
+# router.post("/login", response_model=User)(user_login)
 
-    return templates.TemplateResponse("user_login_view.html", {"request": request})
+# @router.post("/login")
+# def user_login(email: str = Form(...), password: str = Form(...)):
+#     derp = ''
