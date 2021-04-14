@@ -14,10 +14,11 @@ router.post("/create", response_model=User)(user_create)
 
 router.get("/login", response_class=HTMLResponse)(get_user_login)
 
-
 router.post("/login")(user_login)
 # router.post("/login", response_model=User)(user_login)
 
 # @router.post("/login")
 # def user_login(email: str = Form(...), password: str = Form(...)):
 #     derp = ''
+
+router.get("/logout")(user_logout)

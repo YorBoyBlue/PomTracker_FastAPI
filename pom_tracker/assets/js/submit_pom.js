@@ -9,7 +9,7 @@ function submitPom() {
     let data = $('form.pom-form').serialize();
     // Validate the pom info
     $.ajax({
-        url: '/api/pom_validation',
+        url: '/pomodoro/validation',
         type: 'POST',
         cache: false,
         dataType: 'html',

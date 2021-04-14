@@ -1,4 +1,4 @@
-from fastapi import Request, Response, Form, Depends, HTTPException
+from fastapi import Request, Response, Depends, Form, HTTPException
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 
@@ -11,21 +11,13 @@ import string
 import hashlib
 from datetime import datetime
 
-from ..database.db import SessionLocal
+from ..error_handling.my_exceptions import NoSessionRecordExists
+from ..dependencies.auth import auth_user
+from ..dependencies.db import get_db
+
 from ..models.user_schema import *
 from ..models.user_model import UserModel
 from ..models.session_model import SessionModel
-from ..error_handling.my_exceptions import NoSessionRecordExists
-
-
-# Dependency
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
 
 templates = Jinja2Templates(directory="pom_tracker/views")
 
@@ -113,11 +105,29 @@ def user_login(response: Response, email: str = Form(...), password: str = Form(
             finally:
                 response.set_cookie(key="pomodoro_login_hash_2",
                                     value=pomodoro_login_hash,
-                                    max_age=79200,
-                                    path='/')
-                # return response
-                return RedirectResponse(url="/pomodoro/today", status_code=303)
+                                    max_age=79200)
+
+                headers = response.headers.items()
+                # Redirect response
+                return RedirectResponse(url="/pomodoro/today", status_code=303,
+                                        headers=response.headers)
 
         else:
             return RedirectResponse(url='/users/create', status_code=303)
             # return RedirectResponse('/app/login_failed')
+
+
+def user_logout(response: Response, request: Request, db: Session = Depends(get_db),
+                user: UserModel = Depends(auth_user)):
+    if user is False or user is None:
+        return RedirectResponse(url="/users/login", status_code=303)
+
+    cookies = request.cookies
+    if 'pomodoro_login_hash_2' in cookies:
+        # This will remove the cookie because we are overriding the
+        # existing one with a negative max_age
+        response.delete_cookie('pomodoro_login_hash_2')
+        db.query(SessionModel).filter_by(user_id=user.id).delete(
+            synchronize_session=False)
+        db.commit()
+    return RedirectResponse(url="/users/login", status_code=303, headers=response.headers)

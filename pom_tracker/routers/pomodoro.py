@@ -9,3 +9,5 @@ router = APIRouter(
 )
 
 router.get("/today", response_class=HTMLResponse)(get_today)
+
+router.post("/validation")(validate_pom)
