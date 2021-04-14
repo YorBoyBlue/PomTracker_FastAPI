@@ -12,7 +12,13 @@ def auth_user(request: Request, db: Session = Depends(get_db)):
     included_paths_user = [
         '/users/logout',
         '/pomodoro/today',
-        '/pomodoro/validation'
+        '/pomodoro/validation',
+        '/pomodoro/submit',
+        '/pomodoro/delete',
+        '/pomodoro/get_collection',
+        '/pomodoro/display_collection',
+        '/pomodoro/display_export',
+        '/pomodoro/export'
     ]
 
     if request.url.path in included_paths_user:

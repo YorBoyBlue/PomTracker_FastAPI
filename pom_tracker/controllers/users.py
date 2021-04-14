@@ -15,7 +15,6 @@ from ..error_handling.my_exceptions import NoSessionRecordExists
 from ..dependencies.auth import auth_user
 from ..dependencies.db import get_db
 
-from ..models.user_schema import *
 from ..models.user_model import UserModel
 from ..models.session_model import SessionModel
 
@@ -47,12 +46,12 @@ def user_create(email: str = Form(...), first_name: str = Form(...), middle_name
         db.commit()
     except IntegrityError as e:
         db.rollback()
-        return RedirectResponse('/')
+        raise HTTPException(status_code=404, detail="User already exists with that email")
         # raise falcon.HTTPFound('/app/create_email_exists')
 
     else:
         # Send user to the login page if their account was created
-        return RedirectResponse('/users/login')
+        return RedirectResponse('/users/login', status_code=303)
 
 
 def get_user_login(request: Request):

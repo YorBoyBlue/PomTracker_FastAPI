@@ -1,3 +1,5 @@
+// noinspection JSVoidFunctionReturnValueUsed
+
 let pom_app = {};
 
 Pom_Collection_App = function () {
@@ -26,7 +28,7 @@ Pom_Collection_App = function () {
                 let that = this;
 
                 $.ajax({
-                    url: "/api/poms",
+                    url: "/pomodoro/get_collection",
                     type: "GET",
                     cache: false,
                     dataType: "json",
@@ -538,7 +540,7 @@ Pom_Collection_App = function () {
             }
 
             $.ajax({
-                url: "/api/poms",
+                url: "/pomodoro/get_collection",
                 type: "GET",
                 data: data,
                 cache: false,

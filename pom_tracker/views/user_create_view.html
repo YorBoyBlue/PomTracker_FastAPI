@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Pomodoro Tracker</title>
-    <link rel="icon" href="/assets/favicon.ico">
+    <link rel="icon" href="{{ url_for('static', path='/images/favicon.ico') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', path='/css/style.css') }}">
     <link rel="stylesheet" type="text/css"
           href="{{ url_for('static', path='/css/user_create.css') }}">
@@ -18,11 +18,11 @@
         <h2 class="header-title">Pomodoro Time Tracker</h2>
         <nav>
             <ul>
-                <li><a class="btn" role="button" href="/app/settings">&#9881;</a></li>
+                <li><a class="btn" role="button" href="/settings">&#9881;</a></li>
                 <li><a class="btn" role="button" href="/users/logout">Logout</a></li>
                 <li><a class="btn" role="button" href="/users/login">Login/Create</a></li>
-                <li><a class="btn" role="button" href="/app/export_poms">Export Poms</a></li>
-                <li><a class="btn" role="button" href="/app/pomodoro_set">Display Poms</a></li>
+                <li><a class="btn" role="button" href="/pomodoro/display_export">Export Poms</a></li>
+                <li><a class="btn" role="button" href="/pomodoro/display_collection">Display Poms</a></li>
                 <li><a class="btn" role="button" href="/pomodoro/today">Pomodoro</a></li>
                 <li><a class="btn" role="button" href="/">Home</a></li>
             </ul>

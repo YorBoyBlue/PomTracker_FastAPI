@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" href="/assets/favicon.ico">
+    <link rel="icon" href="{{ url_for('static', path='/images/favicon.ico') }}">
     <title>Pomodoro Tracker</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', path='/css/style.css') }}">
     <link rel="stylesheet" type="text/css"
@@ -18,11 +18,11 @@
         <h2 class="header-title">Pomodoro Time Tracker</h2>
         <nav>
             <ul>
-                <li><a class="btn" role="button" href="/app/settings">&#9881;</a></li>
+                <li><a class="btn" role="button" href="/settings">&#9881;</a></li>
                 <li><a class="btn" role="button" href="/users/logout">Logout</a></li>
                 <li><a class="btn" role="button" href="/users/login">Login/Create</a></li>
-                <li><a class="btn" role="button" href="/app/export_poms">Export Poms</a></li>
-                <li><a class="btn" role="button" href="/app/pomodoro_set">Display Poms</a></li>
+                <li><a class="btn" role="button" href="/pomodoro/display_export">Export Poms</a></li>
+                <li><a class="btn" role="button" href="/pomodoro/display_collection">Display Poms</a></li>
                 <li><a class="btn" role="button" href="/pomodoro/today">Pomodoro</a></li>
                 <li><a class="btn" role="button" href="/">Home</a></li>
             </ul>
@@ -36,6 +36,9 @@
             <div class="col-md-12">
                 <form class="pom-form">
                     <div class="row">
+                        <div id="validation-error" class="alert alert-warning"
+                             style="width: 100%; display: none;">
+                        </div>
                         <div class="col-xl-6 col-lg-4 col-md-12 col-sm-12">
                             <div class="row">
                                 <h2>Pomodoro:</h2>
@@ -90,7 +93,7 @@
                             <div class="row">
                                 <h5 class="title">Title:</h5>
                                 <textarea rows="3" cols="50" type='text' name='task'></textarea>
-                                <h5 style="margin-top: 10px">Description:</h5>
+                                <h5 style="margin-top: 10px">Review:</h5>
                                 <textarea rows="6" cols="50" type='text' name='review'></textarea>
                             </div>
                             <br>
@@ -120,7 +123,7 @@
     <div class="container pom-app">
         <div class="row pom-sheet">
             <div class="col-md-12">
-                <form action='/api/delete_poms' method='post'>
+                <form action='/pomodoro/delete' method='post'>
                     <br>
                     <a class="btn btn-success float-right main-button" href="/api/pom_sheet_export"
                        role="button">Export
@@ -185,7 +188,6 @@
             </div>
         </div>
     </div>
-    <div id="derp"></div>
     <div>
         <img class="time-image mx-auto d-block"
              src="{{ url_for('static', path='/images/time.jpg') }}">
