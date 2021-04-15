@@ -16,13 +16,11 @@
         <h2 class="header-title">Pomodoro Time Tracker</h2>
         <nav>
             <ul>
-                <li><a class="btn" role="button" href="/settings">&#9881;</a></li>
-                <li><a class="btn" role="button" href="/users/logout">Logout</a></li>
-                <li><a class="btn" role="button" href="/users/login">Login/Create</a></li>
-                <li><a class="btn" role="button" href="/pomodoro/display_export">Export Poms</a>
-                </li>
-                <li><a class="btn" role="button" href="/pomodoro/display_collection">Display
-                    Poms</a></li>
+                <li><a class="btn" role="button" href="/user/settings">&#9881;</a></li>
+                <li><a class="btn" role="button" href="/user/logout">Logout</a></li>
+                <li><a class="btn" role="button" href="/user/login">Login/Create</a></li>
+                <li><a class="btn" role="button" href="/pomodoro/export">Export Poms</a></li>
+                <li><a class="btn" role="button" href="/pomodoro/collection">Display Poms</a></li>
                 <li><a class="btn" role="button" href="/pomodoro/today">Pomodoro</a></li>
                 <li><a class="btn" role="button" href="/">Home</a></li>
             </ul>
@@ -38,10 +36,12 @@
                     <div class="col-12">
                         <h2>Export Pom Sheets:</h2>
                         <br><br>
-                        <p>You can choose a start and end date to export all pomodoros within those dates (including the
+                        <p>You can choose a start and end date to export all pomodoros within those
+                            dates (including the
                             start and end date). This will export all poms into a single file.</p>
                         <br>
-                        <p>There is currently only support to export a JSON file but there will be a CSV export coming
+                        <p>There is currently only support to export a JSON file but there will be
+                            a CSV export coming
                             soon as well.</p>
                         <br><br>
                     </div>
@@ -57,7 +57,9 @@
                             <br>
                             <input type="date" title="end_date" name="end_date" required>
                             <br><br><br><br>
-                            <button class="btn btn-primary main-button" role="button" type="submit">Export</button>
+                            <button class="btn btn-primary main-button" role="button"
+                                    type="submit">Export
+                            </button>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
                         </div>

@@ -12,8 +12,8 @@ import hashlib
 from datetime import datetime
 
 from ..error_handling.my_exceptions import NoSessionRecordExists
-from ..dependencies.auth import auth_user
-from ..dependencies.db import get_db
+from ..dependencies.auth import get_user
+from ..dependencies.database_manager import get_db
 
 from ..models.user_model import UserModel
 from ..models.session_model import SessionModel
@@ -21,15 +21,30 @@ from ..models.session_model import SessionModel
 templates = Jinja2Templates(directory="pom_tracker/views")
 
 
-def get_user_create(request: Request):
+def render_settings(request: Request, user: UserModel = Depends(get_user)):
+    """Home endpoint"""
+
+    if user is False or user is None:
+        return RedirectResponse(url="/user/login", status_code=303)
+
+    return templates.TemplateResponse("settings_view.html", {"request": request})
+
+
+def render_create(request: Request):
     """User create endpoint"""
 
     return templates.TemplateResponse("user_create_view.html", {"request": request})
 
 
-def user_create(email: str = Form(...), first_name: str = Form(...), middle_name: str = Form(...),
-                last_name: str = Form(...), display_name: str = Form(...),
-                password: str = Form(...), db: Session = Depends(get_db)):
+def render_login(request: Request):
+    """User login endpoint"""
+
+    return templates.TemplateResponse("user_login_view.html", {"request": request})
+
+
+def create(email: str = Form(...), first_name: str = Form(...), middle_name: str = Form(...),
+           last_name: str = Form(...), display_name: str = Form(...),
+           password: str = Form(...), db: Session = Depends(get_db)):
     """Create new user"""
 
     today = datetime.utcnow()
@@ -51,17 +66,11 @@ def user_create(email: str = Form(...), first_name: str = Form(...), middle_name
 
     else:
         # Send user to the login page if their account was created
-        return RedirectResponse('/users/login', status_code=303)
+        return RedirectResponse('/user/login', status_code=303)
 
 
-def get_user_login(request: Request):
-    """User login endpoint"""
-
-    return templates.TemplateResponse("user_login_view.html", {"request": request})
-
-
-def user_login(response: Response, email: str = Form(...), password: str = Form(...),
-               db: Session = Depends(get_db)):
+def login(response: Response, email: str = Form(...), password: str = Form(...),
+          db: Session = Depends(get_db)):
     """Login user"""
 
     # Validate user
@@ -112,14 +121,14 @@ def user_login(response: Response, email: str = Form(...), password: str = Form(
                                         headers=response.headers)
 
         else:
-            return RedirectResponse(url='/users/create', status_code=303)
+            return RedirectResponse(url='/user/create', status_code=303)
             # return RedirectResponse('/app/login_failed')
 
 
-def user_logout(response: Response, request: Request, db: Session = Depends(get_db),
-                user: UserModel = Depends(auth_user)):
+def logout(response: Response, request: Request, db: Session = Depends(get_db),
+           user: UserModel = Depends(get_user)):
     if user is False or user is None:
-        return RedirectResponse(url="/users/login", status_code=303)
+        return RedirectResponse(url="/user/login", status_code=303)
 
     cookies = request.cookies
     if 'pomodoro_login_hash_2' in cookies:
@@ -129,4 +138,4 @@ def user_logout(response: Response, request: Request, db: Session = Depends(get_
         db.query(SessionModel).filter_by(user_id=user.id).delete(
             synchronize_session=False)
         db.commit()
-    return RedirectResponse(url="/users/login", status_code=303, headers=response.headers)
+    return RedirectResponse(url="/user/login", status_code=303, headers=response.headers)

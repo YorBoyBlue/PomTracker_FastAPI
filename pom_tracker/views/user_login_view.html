@@ -18,11 +18,11 @@
         <h2 class="header-title">Pomodoro Time Tracker</h2>
         <nav>
             <ul>
-                <li><a class="btn" role="button" href="/settings">&#9881;</a></li>
-                <li><a class="btn" role="button" href="/users/logout">Logout</a></li>
-                <li><a class="btn" role="button" href="/users/login">Login/Create</a></li>
-                <li><a class="btn" role="button" href="/pomodoro/display_export">Export Poms</a></li>
-                <li><a class="btn" role="button" href="/pomodoro/display_collection">Display Poms</a></li>
+                <li><a class="btn" role="button" href="/user/settings">&#9881;</a></li>
+                <li><a class="btn" role="button" href="/user/logout">Logout</a></li>
+                <li><a class="btn" role="button" href="/user/login">Login/Create</a></li>
+                <li><a class="btn" role="button" href="/pomodoro/export">Export Poms</a></li>
+                <li><a class="btn" role="button" href="/pomodoro/collection">Display Poms</a></li>
                 <li><a class="btn" role="button" href="/pomodoro/today">Pomodoro</a></li>
                 <li><a class="btn" role="button" href="/">Home</a></li>
             </ul>
@@ -62,14 +62,14 @@
                             today!</p>
 
                         <br>
-                        <a class="btn btn-success main-button" href="/users/create" role="button">Create
+                        <a class="btn btn-success main-button" href="/user/create" role="button">Create
                             New Account</a>
                         <br><br><br>
 
                         <p>If you do already have an account, login below.</p>
                     </div>
                 </div>
-                <form action='/users/login' method='post' autocomplete="on">
+                <form action='/user/login' method='post' autocomplete="on">
                     <div class="row">
                         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
                             <h2>Login:</h2>
