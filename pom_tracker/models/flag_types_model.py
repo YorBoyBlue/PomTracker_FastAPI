@@ -1,8 +1,8 @@
 from sqlalchemy import Column, Integer, VARCHAR
-from ..database.db import Base
+from ..dependencies.database_manager import dbm
 
 
-class FlagTypeModel(Base):
+class FlagTypeModel(dbm.Base):
     __tablename__ = 'flag_types'
 
     id = Column(Integer, primary_key=True)

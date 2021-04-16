@@ -1,8 +1,8 @@
 from sqlalchemy import Column, Integer, Text, DateTime
-from ..database.db import Base
+from ..dependencies.database_manager import dbm
 
 
-class SessionModel(Base):
+class SessionModel(dbm.Base):
     __tablename__ = 'session'
 
     id = Column(Integer, primary_key=True)

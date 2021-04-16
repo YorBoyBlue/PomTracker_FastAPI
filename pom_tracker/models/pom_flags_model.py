@@ -1,10 +1,10 @@
-from ..database.db import Base
+from ..dependencies.database_manager import dbm
 from sqlalchemy import Column, Integer, String
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 
 
-class PomFlagsModel(Base):
+class PomFlagsModel(dbm.Base):
     __tablename__ = 'pomodoro_flags'
 
     id = Column(Integer, primary_key=True)

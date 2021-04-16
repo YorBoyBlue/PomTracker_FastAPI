@@ -12,33 +12,25 @@ import pytz
 import json
 from datetime import datetime
 
-from ..helpers.yaml_helper import YamlHelper
-
-from ..dependencies.auth import get_user
-from ..dependencies.database_manager import get_db
+from ..dependencies.auth_manager import auth
+from ..dependencies.database_manager import dbm
+from ..dependencies.template_mananger import tm
+from ..dependencies.timesheet_manager import tsm
 
 from ..models.pomodoro_model import PomodoroModel
 from ..models.flag_types_model import FlagTypeModel
 from ..models.pom_flags_model import PomFlagsModel
 from ..models.user_model import UserModel
 
-templates = Jinja2Templates(directory="pom_tracker/views")
 
-
-def get_timesheet_template():
-    filepath = 'pom_tracker/config/pom_sheet_times_template.yaml'
-    data = YamlHelper().loader(filepath)
-    return data.get('time_blocks')
-
-
-def render_today(request: Request, db: Session = Depends(get_db),
-                 user: UserModel = Depends(get_user)):
+def render_today(request: Request, db: Session = Depends(dbm.get_db),
+                 user: UserModel = Depends(auth.get_user),
+                 templates: Jinja2Templates = Depends(tm.get),
+                 time_blocks: list = Depends(tsm.get)):
     """Todays pom sheet"""
 
     if user is False or user is None:
-        return RedirectResponse(url="/user/login", status_code=303)
-
-    time_blocks = get_timesheet_template()
+        return RedirectResponse(url="/user/login_session_expired", status_code=303)
 
     today = datetime.now().date()
     todays_poms = db.query(PomodoroModel).filter_by(created=today, user_id=user.id).all()
@@ -53,20 +45,22 @@ def render_today(request: Request, db: Session = Depends(get_db),
     })
 
 
-def render_collection(request: Request, user: UserModel = Depends(get_user)):
+def render_collection(request: Request, user: UserModel = Depends(auth.get_user),
+                      templates: Jinja2Templates = Depends(tm.get)):
     """Display pomodoro collection"""
 
     if user is False or user is None:
-        return RedirectResponse(url="/user/login", status_code=303)
+        return RedirectResponse(url="/user/login_session_expired", status_code=303)
 
     return templates.TemplateResponse("pomodoro_set_view.html", {"request": request})
 
 
-def render_export(request: Request, user: UserModel = Depends(get_user)):
+def render_export(request: Request, user: UserModel = Depends(auth.get_user),
+                  templates: Jinja2Templates = Depends(tm.get)):
     """Display pomodoro collection"""
 
     if user is False or user is None:
-        return RedirectResponse(url="/user/login", status_code=303)
+        return RedirectResponse(url="/user/login_session_expired", status_code=303)
 
     return templates.TemplateResponse("export_poms_view.html", {"request": request})
 
@@ -74,11 +68,11 @@ def render_export(request: Request, user: UserModel = Depends(get_user)):
 def submit(response: Response, task: str = Form(...), review: str = Form(...),
            flags: List[str] = Form(...), distractions: Optional[List[int]] = Form(None),
            pom_success: Optional[int] = Form(None), time_blocks: List[str] = Form(...),
-           db: Session = Depends(get_db), user: UserModel = Depends(get_user)):
+           db: Session = Depends(dbm.get_db), user: UserModel = Depends(auth.get_user)):
     """Validate submitted pomodoro"""
 
     if user is False or user is None:
-        raise HTTPException(status_code=404, detail="User session expired")
+        return RedirectResponse(url="/user/login_session_expired", status_code=303)
 
     today = datetime.now().date()
     user_id = user.id
@@ -117,12 +111,12 @@ def submit(response: Response, task: str = Form(...), review: str = Form(...),
     return response
 
 
-def delete(poms_to_delete: List[str] = Form(...), db: Session = Depends(get_db),
-           user: UserModel = Depends(get_user)):
+def delete(poms_to_delete: List[str] = Form(...), db: Session = Depends(dbm.get_db),
+           user: UserModel = Depends(auth.get_user)):
     """Delete pomodoros"""
 
     if user is False or user is None:
-        return RedirectResponse(url="/user/login", status_code=303)
+        return RedirectResponse(url="/user/login_session_expired", status_code=303)
 
     db.query(PomodoroModel).filter(
         PomodoroModel.id.in_(poms_to_delete)).delete(
@@ -137,11 +131,11 @@ def delete(poms_to_delete: List[str] = Form(...), db: Session = Depends(get_db),
 
 def collection(offset: Optional[int] = 0, date_filter: Optional[str] = '',
                distractions_filter: Optional[int] = 0, unsuccessful_filter: Optional[int] = 0,
-               db: Session = Depends(get_db), user: UserModel = Depends(get_user)):
+               db: Session = Depends(dbm.get_db), user: UserModel = Depends(auth.get_user)):
     """Get pomodoro collection"""
 
     if user is False or user is None:
-        return RedirectResponse(url="/user/login", status_code=303)
+        return RedirectResponse(url="/user/login_session_expired", status_code=303)
 
     limit = 20
 
@@ -194,9 +188,12 @@ def collection(offset: Optional[int] = 0, date_filter: Optional[str] = '',
     return JSONResponse(content=json_compatible_item_data, status_code=200)
 
 
-def export(response: Response, start_date: str = Form(...), end_date: str = Form(...),
-           db: Session = Depends(get_db), user: UserModel = Depends(get_user)):
+def export(start_date: str = Form(...), end_date: str = Form(...),
+           db: Session = Depends(dbm.get_db), user: UserModel = Depends(auth.get_user)):
     """Export pomodoros"""
+
+    start_date = datetime.strptime(start_date, "%Y-%m-%d")
+    end_date = datetime.strptime(end_date, "%Y-%m-%d")
 
     # Query poms within start and end dates
     poms = db.query(

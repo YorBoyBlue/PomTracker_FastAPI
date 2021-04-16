@@ -36,12 +36,10 @@
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-12">
-                        {% if login_failed %}
+                        {% if invalid_login %}
                         <div class="alert alert-warning">
                             <strong>Oops!</strong> We could not find a user with that email and/or
-                            password. Please
-                            double check
-                            your info or create a new account.
+                            password. Please double check your info or create a new account.
                         </div>
                         {% endif %}
                         {% if session_expired %}

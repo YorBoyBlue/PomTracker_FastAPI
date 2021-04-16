@@ -11,7 +11,10 @@ router = APIRouter(
 
 router.get("/settings", response_class=HTMLResponse)(render_settings)
 router.get("/create", response_class=HTMLResponse)(render_create)
+router.get("/create_invalid", response_class=HTMLResponse)(render_create_invalid)
 router.get("/login", response_class=HTMLResponse)(render_login)
+router.get("/login_session_expired", response_class=HTMLResponse)(render_login_session_expired)
+router.get("/login_invalid", response_class=HTMLResponse)(render_login_invalid)
 router.get("/logout")(logout)
 
 router.post("/create")(create)
